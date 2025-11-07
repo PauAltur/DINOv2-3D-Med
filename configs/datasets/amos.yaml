@@ -1,1 +1,2 @@
-data_module#train_dataset#data: "$monai.auto3dseg.datafold_read('/mnt/data1/datasets/AMOS/amos22/dataset.json', basedir='/mnt/data1/datasets/AMOS/amos22', key='training')[0]"
+dataset_root: "${oc.env:DATASET_ROOT,./data}"
+data_module#train_dataset#data: "$monai.auto3dseg.datafold_read(f'@dataset_root/AMOS/amos22/dataset.json', basedir=f'@dataset_root/AMOS/amos22', key='training')[0]"

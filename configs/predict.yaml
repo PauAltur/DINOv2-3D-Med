@@ -1,4 +1,6 @@
-project: /home/suraj/Repositories/DINOv2_3D
+project: "${oc.env:PROJECT_ROOT,.}"
+output_dir: "${oc.env:OUTPUT_DIR,./outputs}"
+dataset_root: "${oc.env:DATASET_ROOT,./data}"
 num_workers: 8
 
 trainer:
@@ -16,7 +18,7 @@ trainer:
         name: "get_predictions"
     callbacks:
       - _target_: project.callbacks.prediction_saver.SavePredictions
-        path: /home/suraj/Repositories/DINOv2_3D/predictions.csv
+        path: "$'@output_dir/predictions.csv'"
 
 lightning_module:
     _target_: project.models.DINOv2_3D_LightningModule
@@ -38,7 +40,7 @@ lightning_module:
     train: null
     predict:
         _target_: monai.data.Dataset
-        data: "$monai.auto3dseg.datafold_read('/mnt/data1/datasets/AMOS/amos22/dataset.json', basedir='/mnt/data1/datasets/AMOS/amos22', key='validation')[0]"
+        data: "$monai.auto3dseg.datafold_read(f'@dataset_root/AMOS/amos22/dataset.json', basedir=f'@dataset_root/AMOS/amos22', key='validation')[0]"
         transform:
             _target_: torchvision.transforms.Compose
             transforms:

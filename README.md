@@ -34,6 +34,40 @@ A configuration-first (and therefore easily understandable and trackable) reposi
 
 If you do not want to use uv, you could just as easily do a `pip install -e .` in the repo directory
 
+## Configuration
+
+### Environment Variables
+The configuration files now use environment variables instead of hardcoded paths. This makes the project portable and easier to set up on different machines.
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` to set your paths:
+   ```bash
+   # Project root directory (defaults to current directory if not set)
+   PROJECT_ROOT=.
+
+   # Output directory for experiments, checkpoints, and logs
+   OUTPUT_DIR=./outputs
+
+   # Dataset root directory
+   DATASET_ROOT=/path/to/your/datasets
+   ```
+
+3. The configuration system will automatically use these environment variables, with sensible defaults if not set:
+   - `PROJECT_ROOT`: Defaults to current directory (`.`)
+   - `OUTPUT_DIR`: Defaults to `./outputs`
+   - `DATASET_ROOT`: Defaults to `./data`
+
+### Dataset Paths
+When using the provided dataset configurations:
+- `configs/datasets/amos.yaml`: Expects AMOS dataset at `$DATASET_ROOT/AMOS/amos22/`
+- `configs/datasets/idc_dump.yaml`: Expects IDC dataset at `$DATASET_ROOT/IDC_SSL_CT/`
+
+You can override these by modifying the dataset config files or creating your own.
+
 ## Usage
 ### Training
 Run the training script with the default training config:

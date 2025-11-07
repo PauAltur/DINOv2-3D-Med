@@ -1,6 +1,7 @@
 # This version of the YAML uses processed patches
-project: /home/suraj/Repositories/DINOv2_3D
+project: "${oc.env:PROJECT_ROOT,.}"
 run_name: "DINOv2_pretrain_primus"
+output_dir: "${oc.env:OUTPUT_DIR,./outputs}"
 img_size: [160, 160, 160]
 hidden_size: 864
 patch_size: [8, 8, 8]
@@ -24,10 +25,10 @@ trainer:
     _target_: pytorch_lightning.loggers.WandbLogger
     project: "dinov2"
     name: "@run_name"
-    save_dir: '$"/mnt/data1/suraj/dinov2_experiments/dinov2_pretrain/@run_name"'
+    save_dir: '$"@output_dir/@run_name"'
   callbacks:
     - _target_: pytorch_lightning.callbacks.ModelCheckpoint
-      dirpath: '$"/mnt/data1/suraj/dinov2_experiments/dinov2_pretrain/@run_name"'
+      dirpath: '$"@output_dir/@run_name"'
       filename: "dinov2_3d_fixed_{epoch:03d}"
       save_last: True
       every_n_epochs: 1
