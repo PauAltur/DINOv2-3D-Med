@@ -1,2 +1,2 @@
-dataset_root: "${oc.env:DATASET_ROOT,./data}"
+dataset_root: "$@DATASET_ROOT if @DATASET_ROOT is not None else './data'"
 data_module#train_dataset#dataset#data: "$monai.auto3dseg.datafold_read(f'@dataset_root/IDC_SSL_CT/idc_dump_datalist.json', basedir='', key='training')[0]"

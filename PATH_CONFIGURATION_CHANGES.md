@@ -7,9 +7,11 @@ All hardcoded paths in the configuration files have been replaced with environme
 
 ### 1. Config Files Updated
 
+**Note**: The configuration files use MONAI ConfigParser syntax for environment variables with fallback defaults.
+
 #### `configs/train.yaml`
 - **Before**: `project: /home/suraj/Repositories/DINOv2_3D`
-- **After**: `project: "${oc.env:PROJECT_ROOT,.}"`
+- **After**: `project: "$@PROJECT_ROOT if @PROJECT_ROOT is not None else '.'"`
 
 - **Before**: `save_dir: '/mnt/data1/suraj/dinov2_experiments/dinov2_pretrain/@run_name'`
 - **After**: `save_dir: '@output_dir/@run_name'`
@@ -17,11 +19,11 @@ All hardcoded paths in the configuration files have been replaced with environme
 - **Before**: `dirpath: '/mnt/data1/suraj/dinov2_experiments/dinov2_pretrain/@run_name'`
 - **After**: `dirpath: '@output_dir/@run_name'`
 
-- **Added**: `output_dir: "${oc.env:OUTPUT_DIR,./outputs}"`
+- **Added**: `output_dir: "$@OUTPUT_DIR if @OUTPUT_DIR is not None else './outputs'"`
 
 #### `configs/predict.yaml`
 - **Before**: `project: /home/suraj/Repositories/DINOv2_3D`
-- **After**: `project: "${oc.env:PROJECT_ROOT,.}"`
+- **After**: `project: "$@PROJECT_ROOT if @PROJECT_ROOT is not None else '.'"`
 
 - **Before**: `path: /home/suraj/Repositories/DINOv2_3D/predictions.csv`
 - **After**: `path: "@output_dir/predictions.csv"`
@@ -30,12 +32,12 @@ All hardcoded paths in the configuration files have been replaced with environme
 - **After**: `data: "$monai.auto3dseg.datafold_read(f'@dataset_root/AMOS/amos22/dataset.json', basedir=f'@dataset_root/AMOS/amos22', key='validation')[0]"`
 
 - **Added**: 
-  - `output_dir: "${oc.env:OUTPUT_DIR,./outputs}"`
-  - `dataset_root: "${oc.env:DATASET_ROOT,./data}"`
+  - `output_dir: "$@OUTPUT_DIR if @OUTPUT_DIR is not None else './outputs'"`
+  - `dataset_root: "$@DATASET_ROOT if @DATASET_ROOT is not None else './data'"`
 
 #### `configs/dinotxt_stage.yaml`
 - **Before**: `project: /home/suraj/Repositories/DINOv2_3D`
-- **After**: `project: "${oc.env:PROJECT_ROOT,.}"`
+- **After**: `project: "$@PROJECT_ROOT if @PROJECT_ROOT is not None else '.'"`
 
 - **Before**: `save_dir: '/mnt/data1/suraj/dinov2_experiments/dinov2_pretrain/@run_name'`
 - **After**: `save_dir: '@output_dir/@run_name'`
@@ -43,19 +45,26 @@ All hardcoded paths in the configuration files have been replaced with environme
 - **Before**: `dirpath: '/mnt/data1/suraj/dinov2_experiments/dinov2_pretrain/@run_name'`
 - **After**: `dirpath: '@output_dir/@run_name'`
 
-- **Added**: `output_dir: "${oc.env:OUTPUT_DIR,./outputs}"`
+- **Added**: `output_dir: "$@OUTPUT_DIR if @OUTPUT_DIR is not None else './outputs'"`
 
 #### `configs/datasets/amos.yaml`
 - **Before**: `data: "$monai.auto3dseg.datafold_read('/mnt/data1/datasets/AMOS/amos22/dataset.json', basedir='/mnt/data1/datasets/AMOS/amos22', key='training')[0]"`
 - **After**: `data: "$monai.auto3dseg.datafold_read(f'@dataset_root/AMOS/amos22/dataset.json', basedir=f'@dataset_root/AMOS/amos22', key='training')[0]"`
 
-- **Added**: `dataset_root: "${oc.env:DATASET_ROOT,./data}"`
+- **Added**: `dataset_root: "$@DATASET_ROOT if @DATASET_ROOT is not None else './data'"`
 
 #### `configs/datasets/idc_dump.yaml`
 - **Before**: `data: "$monai.auto3dseg.datafold_read('/mnt/ssd1/ibro/IDC_SSL_CT/idc_dump_datalist.json', basedir='', key='training')[0]"`
 - **After**: `data: "$monai.auto3dseg.datafold_read(f'@dataset_root/IDC_SSL_CT/idc_dump_datalist.json', basedir='', key='training')[0]"`
 
-- **Added**: `dataset_root: "${oc.env:DATASET_ROOT,./data}"`
+- **Added**: `dataset_root: "$@DATASET_ROOT if @DATASET_ROOT is not None else './data'"`
+
+### 2. Run Script Updated
+
+#### `scripts/run.py`
+- Added environment variable reading and injection into ConfigParser
+- Environment variables (`PROJECT_ROOT`, `OUTPUT_DIR`, `DATASET_ROOT`) are now read from the system and passed to MONAI's ConfigParser before parsing
+- This allows the YAML configs to reference these variables using the `@variable_name` syntax
 
 ### 2. New Files Created
 

@@ -1,6 +1,6 @@
-project: "${oc.env:PROJECT_ROOT,.}"
-output_dir: "${oc.env:OUTPUT_DIR,./outputs}"
-dataset_root: "${oc.env:DATASET_ROOT,./data}"
+project: "$@PROJECT_ROOT if @PROJECT_ROOT is not None else '.'"
+output_dir: "$@OUTPUT_DIR if @OUTPUT_DIR is not None else './outputs'"
+dataset_root: "$@DATASET_ROOT if @DATASET_ROOT is not None else './data'"
 num_workers: 8
 
 trainer:

@@ -22,14 +22,25 @@ def run(mode, config_file: str, **config_overrides):
 
     Args:
         config_file (str): Path to the configuration file (YAML)
-        mode (str): Either "train" or "predict"
+        mode (str): Either "fit" or "predict"
         **config_overrides: Additional configuration overrides (key=value)
     """
 
     assert mode in ["fit", "predict"], "Unsupported mode"
 
+    # Read environment variables for paths
+    env_vars = {
+        "PROJECT_ROOT": os.environ.get("PROJECT_ROOT"),
+        "OUTPUT_DIR": os.environ.get("OUTPUT_DIR"),
+        "DATASET_ROOT": os.environ.get("DATASET_ROOT"),
+    }
+
     parser = ConfigParser()
     parser.read_config(config_file)
+    
+    # Update parser with environment variables
+    parser.update(env_vars)
+    
     parser.parse()
     parser.update(config_overrides)
 

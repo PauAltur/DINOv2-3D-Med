@@ -1,7 +1,7 @@
 # This version of the YAML uses processed patches
-project: "${oc.env:PROJECT_ROOT,.}"
+project: "$@PROJECT_ROOT if @PROJECT_ROOT is not None else '.'"
 run_name: "DINOv2_pretrain_primus"
-output_dir: "${oc.env:OUTPUT_DIR,./outputs}"
+output_dir: "$@OUTPUT_DIR if @OUTPUT_DIR is not None else './outputs'"
 img_size: [160, 160, 160]
 hidden_size: 864
 patch_size: [8, 8, 8]
