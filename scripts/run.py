@@ -44,7 +44,8 @@ def run(mode, config_file: str, **config_overrides):
     parser.parse()
     parser.update(config_overrides)
 
-    project_path = parser.get("project")
+    # Get evaluated project path (use parsed content so MONAI expressions are resolved)
+    project_path = parser.get_parsed_content("project")
     import_module_from_path("project", project_path)
 
     trainer = parser.get_parsed_content("trainer")
