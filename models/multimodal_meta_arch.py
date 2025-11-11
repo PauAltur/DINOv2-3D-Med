@@ -7,7 +7,6 @@ import torch
 from torch import nn
 from typing import Optional, Dict, Any, Union, List
 
-from models.backbones.text_encoder import create_text_encoder
 from losses.image_text_alignment import ImageTextAlignmentLoss
 
 
